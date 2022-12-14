@@ -13,7 +13,7 @@ namespace MC_SVToolTipConfigure
     {
         public const string pluginGuid = "mc.starvalor.tooltipconfigure";
         public const string pluginName = "SV Tooltip Configure";
-        public const string pluginVersion = "0.6.0";
+        public const string pluginVersion = "1.0.0";
 
         private static ConfigEntry<bool> cfgEnable;
         private static ConfigEntry<float> cfgDelay;
@@ -87,7 +87,7 @@ namespace MC_SVToolTipConfigure
                     delayedTTs.Remove(ttInst);
                 else if (delayedTTs.TryGetValue(ttInst, out CallProperties callProperties) &&
                     !callProperties.deleteFlag && callProperties.count >= 0 &&
-                    (callProperties.count -= Time.deltaTime) <= 0)
+                    (callProperties.count -= Time.unscaledDeltaTime) <= 0)
                 {
                     callProperties.count = -1; // Just in case it is exactly 0
                     callProperties.showMain = true;
@@ -115,7 +115,6 @@ namespace MC_SVToolTipConfigure
                 // This TT instance has been set inactive and now re-called, so refresh all values
                 if (cp.deleteFlag)
                     delayedTTs[__instance] = new CallProperties(cfgDelay.Value, text, bigImage, screenCenter);
-
                 // Timer elapsed, show main tool tip and indicate extras to be shown
                 else if (cp.showMain)
                     return true;
